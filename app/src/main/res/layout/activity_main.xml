@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+   android:gravity="center"
+  android:background="@drawable/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_connexion"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_custom"
+                    android:textColor="#FFF"
+                    android:text="Connexion"
+                    android:textSize="@dimen/text_size"
+                    android:textAllCaps="false"
+
+                    />
+
+                <Button
+                    android:id="@+id/btn_inscription"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="Inscription"
+                    android:background="@drawable/btn_custom"
+                    android:textColor="#FFF"
+
+                   android:textSize="@dimen/text_size"
+                    android:layout_marginTop="20sp"
+                    android:textAllCaps="false" />
+        </LinearLayout>
+
+</LinearLayout>

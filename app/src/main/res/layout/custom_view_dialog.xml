@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="20dp"
+    android:layout_height="match_parent">
+<TextView
+    android:id="@+id/change"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Changer photo de profil"
+    android:textColor="#000"
+    android:drawableEnd="@drawable/camera"
+    android:textSize="@dimen/text_size"
+    android:background="?attr/selectableItemBackground"
+    android:layout_marginLeft="@dimen/text_size"/>
+    <TextView
+        android:id="@+id/supprimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Supprimer photo de profil"
+        android:textColor="#000"
+        android:textSize="@dimen/text_size"
+        android:drawableEnd="@drawable/remove"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="@dimen/text_size"
+        android:layout_marginTop="10dp"/>
+
+
+</LinearLayout>

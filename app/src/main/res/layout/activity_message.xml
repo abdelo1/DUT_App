@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#2F72887E"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MessageActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="#FFF"
+            android:background="@color/colorPrimary"
+
+            />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img"
+            android:layout_width="@dimen/img_width"
+            android:layout_height="@dimen/img_height"
+            android:src="@drawable/user_logo"
+            android:layout_marginLeft="45dp"
+            />
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:layout_toRightOf="@id/img"
+            android:layout_marginTop="13dp"
+            android:textSize="@dimen/text_size"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"/>
+        <TextView
+            android:id="@+id/isonline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="En ligne"
+            android:visibility="invisible"
+            android:layout_toRightOf="@id/img"
+            android:layout_marginTop="30dp"
+            android:textSize="@dimen/text_size"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"/>
+        <EditText
+            android:id="@+id/inputMessage"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/edittext_custom"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"
+            android:maxLines="6"
+            android:hint="Taper votre message ..."/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_send_black_24dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/inputMessage"
+            android:layout_marginBottom="@dimen/text_size">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+</RelativeLayout>
+

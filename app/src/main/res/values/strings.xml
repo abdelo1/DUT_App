@@ -1,0 +1,31 @@
+<resources>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">IstChat</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Se déconnecter</string>
+
+    <string name="menu_home">Mon profil</string>
+    <string name="menu_gallery">Messages</string>
+    <string name="menu_slideshow">Evènemements</string>
+    <string name="menu_tools">Paramètres</string>
+    <string name="notifications_admin_channel_name">IST</string>
+    <string name="notifications_admin_channel_description">TITLE</string>
+
+        <string name="app_name">SpeakAgo</string>
+        <string name="connecter_nom">Se connecter </string>
+        <string name="email">Email...</string>
+        <string name="mdp">Mot de passe...</string>
+        <string name="todo">TODO</string>
+        <string name="s_inscrire">Créer un compte</string>
+        <string name="mdp_link">Mot de passe oublié ?</string>
+        <string name="image_clé">image clé</string>
+        <string name="image_cl_2">image_clé2</string>
+        <string name="cr_er_un_compte">Créer un compte</string>
+        <string name="mot_de_passe_oubli">Mot de passe oublié?</string>
+
+
+</resources>
