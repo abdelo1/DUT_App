@@ -241,22 +241,18 @@ else
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            reference=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            reference.child("isonline").setValue("false");
             mAuth.signOut();
             startActivity(new Intent(ProfileActivity.this,ConnectActivity.class));
               finish();
-            return true;
-        }
-        else if (id == R.id.nav_friends) {
-            //fragments des messages
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Fragment_messages(),"friendsfragment").commit();
-            toolbar.setTitle(title[1]);
             return true;
         }
 
         else if (id==R.id.action_del)
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                       builder.setMessage("Etes vous sure de vouloir supprimer ce compte ? Toutes vos donnees seront perdu " )
+                       builder.setMessage("Etes vous sûre de vouloir supprimer ce compte ? Toutes vos données seront perdue ! " )
                         .setPositiveButton("Non", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -149,8 +149,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 {
                     Intent intent =new Intent(mcontext, MessageActivity.class);
                     intent.putExtra("receiverId",a_user_of_listAll.getId());
-                    intent.putExtra("receiverName",a_user_of_listAll.getNom());
-                    intent.putExtra("receiverPhoto",a_user_of_listAll.getImageUrl());
+
                     mcontext.startActivity(intent);
                 }
                 else

@@ -99,8 +99,6 @@ public class RecyclerViewAdapterFriends extends RecyclerView.Adapter<RecyclerVie
             public void onClick(View v) {
                   Intent intent =new Intent(mcontext, MessageActivity.class);
                   intent.putExtra("receiverId",muser.getId());
-                  intent.putExtra("receiverName",muser.getNom());
-                  intent.putExtra("receiverPhoto",muser.getUrlphoto());
                   mcontext.startActivity(intent);
 
             }
@@ -110,7 +108,7 @@ public class RecyclerViewAdapterFriends extends RecyclerView.Adapter<RecyclerVie
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mcontext);
-                builder.setMessage("Etes vous sure de vouloir retirer "+muser
+                builder.setMessage("Etes vous sûre de vouloir retirer "+muser
                 .getNom()+" de votre liste d'amis ?")
                         .setPositiveButton("Non", new DialogInterface.OnClickListener() {
                             @Override

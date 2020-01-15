@@ -64,8 +64,6 @@ String lastmessage;
             public void onClick(View v) {
                 Intent intent =new Intent(mcontext, MessageActivity.class);
                 intent.putExtra("receiverId",user.getId());
-                intent.putExtra("receiverName",user.getNom());
-                intent.putExtra("receiverPhoto",user.getImageUrl());
                 mcontext.startActivity(intent);
 
             }

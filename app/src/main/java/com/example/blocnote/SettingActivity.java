@@ -196,26 +196,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                         Uri downloadUrl = urlTask.getResult();
                         final String url=downloadUrl.toString();
                         reference.child("imageUrl").setValue(url);
-                         freference= FirebaseDatabase.getInstance().getReference("Users");
 
-                         freference.addValueEventListener(new ValueEventListener() {
-                             @Override
-                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                 for (DataSnapshot snapshot:dataSnapshot.getChildren())
-                                 {
-                                     UserClass user=snapshot.getValue(UserClass.class);
-                                    another =FirebaseDatabase.getInstance().getReference("Users").child(user.getId()).child("Friends").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-                                                another.child("urlphoto").setValue(url);
-
-                                }
-                             }
-
-                             @Override
-                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                             }
-                         });
                     }
                 });
 
