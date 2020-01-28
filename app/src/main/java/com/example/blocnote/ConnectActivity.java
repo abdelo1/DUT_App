@@ -62,7 +62,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         progress.setCancelable(false);
         progress.setMessage("Connexion..");
         progress.show();
-        mAuth.signInWithEmailAndPassword(email, password)
+        mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

@@ -9,14 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.blocnote.MessageActivity;
 import com.example.blocnote.R;
 import com.example.blocnote.model.Friend;
+import com.example.blocnote.model.Request;
 import com.example.blocnote.model.UserClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -89,7 +92,7 @@ public class RecyclerViewAdapterFriends extends RecyclerView.Adapter<RecyclerVie
         final Friend muser=mlistFriends.get(i);
         System.out.println("dans friend adapteer  "+muser.getFiliere());
         if (!muser.getUrlphoto().equals("default"))
-            Glide.with(mcontext).load(muser.getUrlphoto()).into(viewHolder.image);
+            Glide.with(mcontext).load(muser.getUrlphoto()).apply(RequestOptions.centerInsideTransform()).into(viewHolder.image);
         else
             viewHolder.image.setImageResource(R.drawable.user_logo);
         viewHolder.text.setText(muser.getNom());
@@ -157,7 +160,7 @@ public  void updateList(List <Friend> newList){
         ImageView image ;
         TextView text;
         TextView textClass;
-        TextView text_remove;
+        Button text_remove;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -15,11 +15,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
+import com.example.blocnote.notifications.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -68,7 +72,7 @@ private  String token;
             @Override
             public void onClick(View v) {
                 if (validateForm()){
-                    signUp(nom,email,password);
+                    signUp(nom,email.trim(),password);
                 }
             }
         });
@@ -77,7 +81,7 @@ private  String token;
 
     }
 
-    private void signUp(final String nom, final String email, String password) {
+    private void signUp(final String nom, final String email, final String password) {
         progressBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -106,12 +110,12 @@ private  String token;
                                 public void onComplete(@NonNull Task<Void> task)
                                 {
                                     if (task.isSuccessful())
-                                        {
+                                    {
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                        preferences.edit().putString("mdp", password).apply();
                                         Intent intent = new Intent(RegisterActivity.this, ChooseProfilActivity.class);
                                         startActivity(intent);
-
-
-                                    }
+                                     }
 
                                     FirebaseInstanceId.getInstance().getInstanceId()
                                             .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -123,26 +127,27 @@ private  String token;
                                                     }
 
                                                     // Get new Instance ID token
-                                                    String token = task.getResult().getToken();
-                                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                    preferences.edit().putString("Token_device", token).apply();
+                                                    Token token = new  Token(task.getResult().getToken()) ;
+                                                    reference = FirebaseDatabase.getInstance().getReference("Tokens").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                    reference.setValue(token);
 
                                                 }
                                             });
-                        }
+                                }
 
-                    });
-
-
+                           });
 
                         }
                         else {
+                                if(task.getException() instanceof FirebaseAuthUserCollisionException)
+                                    Toast.makeText(getApplicationContext(), "Cet Email est deja utilise veuillez en choisir un autre !",
+                                            Toast.LENGTH_SHORT).show();
+                                else
+                                    // If sign in fails, display a message to the user.
+                                    Toast.makeText(RegisterActivity.this, "Inscription echouee veuillez reessayer ",
+                                            Toast.LENGTH_SHORT).show();
 
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(RegisterActivity.this, "Inscription echouee veuillez ressayer ",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
+                            }
 
 
                     }

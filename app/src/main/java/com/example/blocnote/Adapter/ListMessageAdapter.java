@@ -11,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.blocnote.MessageActivity;
 import com.example.blocnote.R;
 import com.example.blocnote.model.Chat;
+import com.example.blocnote.model.TimeAgo;
 import com.example.blocnote.model.UserClass;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +33,8 @@ public class ListMessageAdapter extends RecyclerView.Adapter<ListMessageAdapter.
     private List<UserClass> listuser;
   String tamp;
 String lastmessage;
+String when;
+
 
     public ListMessageAdapter(Context context, List<UserClass> listuser ){
         this.mcontext=context;
@@ -55,7 +59,7 @@ String lastmessage;
 
         sentMessageHolder.username.setText(user.getNom());
         if (!user.getImageUrl().equals("default"))
-            Glide.with(mcontext).load(user.getImageUrl()).into(sentMessageHolder.img);
+            Glide.with(mcontext).load(user.getImageUrl()).apply(RequestOptions.centerInsideTransform()).into(sentMessageHolder.img);
         else
             sentMessageHolder.img.setImageResource(R.drawable.user_logo);
         lastMessage(user.getId(),sentMessageHolder.dernier,sentMessageHolder.date);
@@ -103,19 +107,24 @@ String lastmessage;
             for (DataSnapshot snapshot:dataSnapshot.getChildren())
             {
                 Chat chat=snapshot.getValue(Chat.class);
-                if ((chat.getReceiverid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))&&chat.getSenderid().equals(userid)||
-                        (chat.getReceiverid().equals(userid))&&chat.getSenderid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())  )
+                if(chat!=null)
                 {
-                    lastmessage= chat.getMessage();
-                    tamp=chat.getTime();
+                    if(chat.getReceiverid()!=null) {
+                        if ((chat.getReceiverid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) && chat.getSenderid().equals(userid) ||
+                                (chat.getReceiverid().equals(userid)) && chat.getSenderid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            lastmessage = chat.getMessage();
+                            System.out.println(" timestamp " + chat.getTimeStamp());
+                            when = TimeAgo.getTimeAgo(chat.getTimeStamp());
 
-
+                        }
+                    }
                 }
+
 
 
             }
             dernier.setText(lastmessage);
-            date.setText( tamp);
+            date.setText(when);
         }
 
         @Override

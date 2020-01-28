@@ -97,7 +97,7 @@ public class ChooseProfilActivity extends AppCompatActivity {
                 this.uriImageSelected = data.getData();
                 Glide.with(this) //SHOWING PREVIEW OF IMAGE
                         .load(this.uriImageSelected)
-                        .apply(RequestOptions.circleCropTransform())
+                        .apply(RequestOptions.fitCenterTransform())
                         .into(this.profil);
                 uploadPhotoInFirebase();
 

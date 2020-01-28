@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.blocnote.ProfileActivity;
 import com.example.blocnote.R;
 import com.example.blocnote.model.Request;
@@ -60,9 +62,6 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewAdapter.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
 
-        // badge de notification
-        ProfileActivity.initializeCountNotif(mlistrequest.size());
-
         mAuth=FirebaseAuth.getInstance();
         currentUser=mAuth.getCurrentUser();
         //on recupere un item de la liste
@@ -81,11 +80,21 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewAdapter.
                     }
                 });
         if (!listItem.getPhotourl().equals("default"))
-            Glide.with(mcontext).load(listItem.getPhotourl()).into(viewHolder.image);
+            Glide.with(mcontext).load(listItem.getPhotourl()).apply(RequestOptions.centerInsideTransform()).into(viewHolder.image);
         else
             viewHolder.image.setImageResource(R.drawable.user_logo);
         viewHolder.text.setText(listItem.getNom());
         viewHolder.textClass.setText(listItem.getFiliere());
+        viewHolder.refuser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reference = FirebaseDatabase.getInstance().getReference("FriendRequest")
+                        .child(listItem.getReceiverId())
+                        .child(listItem.getSenderId());
+
+                reference.child("handle").setValue("yes");
+            }
+        });
         viewHolder.text_requ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +144,7 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewAdapter.
                                                                 .child("Friends").child(listItem.getReceiverId());
                                                         reference.setValue(hashMap);
                                                         FirebaseDatabase.getInstance().getReference("FriendRequest")
-                                                                .child(listItem.getReceiverId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                .child(listItem.getReceiverId()).child(listItem.getSenderId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful())
@@ -146,7 +155,7 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewAdapter.
                                                     Toast.makeText(mcontext,"Amis ajoute",Toast.LENGTH_LONG).show();
                                                 }
                                             });
-                                            ProfileActivity.initializeCountNotif(mlistrequest.size());
+
                                         }
 
                                     }
@@ -157,20 +166,7 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewAdapter.
                 }
                 else
                 {
-                    reference = FirebaseDatabase.getInstance().getReference("FriendRequest")
-                            .child(user.getId())
-                            .child(currentUser.getUid());
 
-                    reference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful())
-                                Toast.makeText(mcontext,"Demande d'ami annule",Toast.LENGTH_LONG);
-                            else
-                                Toast.makeText(mcontext,"erreur lors de l'annulation",Toast.LENGTH_LONG);
-                            viewHolder.text_requ.setText("Ajouter ami");
-                        }
-                    });
                 }
 
 
@@ -191,7 +187,8 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewAdapter.
         ImageView image ;
         TextView text;
         TextView textClass;
-        TextView text_requ;
+        Button text_requ;
+        Button refuser;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -199,6 +196,7 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewAdapter.
             image=itemView.findViewById(R.id.img);
             text=itemView.findViewById(R.id.text);
             text_requ=itemView.findViewById(R.id.request);
+            refuser=itemView.findViewById(R.id.refuser);
             textClass=itemView.findViewById(R.id.fil);
         }
 

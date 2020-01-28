@@ -2,6 +2,7 @@ package com.example.blocnote;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -12,11 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.core.view.MenuItemCompat;
 import androidx.appcompat.app.AlertDialog;
 
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
+
+import com.example.blocnote.notifications.Token;
 import com.google.android.material.navigation.NavigationView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -39,6 +44,8 @@ import com.example.blocnote.Fragments.Fragment_users;
 import com.example.blocnote.model.UserClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +53,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class  ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Fragment_messages.OnItemSelectedListener {
@@ -135,8 +143,7 @@ else
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-//        navigationView.getMenu().getItem(1).setActionView(R.layout.menu_dot);
-//        navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
+
 
        mAuth=FirebaseAuth.getInstance();
         fuser=mAuth.getCurrentUser();
@@ -157,7 +164,7 @@ else
                     if (!muser.getImageUrl().equals("default"))
                     {
 
-                        Glide.with(getApplicationContext()).load(Uri.parse(muser.getImageUrl())).apply(RequestOptions.circleCropTransform()).into(user_profil);
+                        Glide.with(getApplicationContext()).load(Uri.parse(muser.getImageUrl())).apply(RequestOptions.centerInsideTransform()).into(user_profil);
                     }
 
                     else
@@ -178,7 +185,15 @@ else
 
          }
      });
+          updateToken(FirebaseInstanceId.getInstance().getToken());
     }
+
+    private void updateToken(String token) {
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mtoken  =new Token(token)  ;
+        ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(mtoken);
+    }
+
 
 
     protected void onResume() {
@@ -195,25 +210,7 @@ else
     }
 
 
-    public static void initializeCountNotif(int x){
-        //Gravity property aligns the text
-        notif.setGravity(Gravity.CENTER_VERTICAL);
-       notif.setTypeface(null, Typeface.BOLD);
-        notif.setTextColor(Color.parseColor("#D81B60"));
 
-
-    }
-    public static void initializeCountMess(int x){
-
-        mess.setGravity(Gravity.CENTER_VERTICAL);
-        mess.setTypeface(null,Typeface.BOLD);
-        mess.setTextColor(Color.parseColor("#D81B60"));
-//count is added
-        if (x==0)
-            mess.setText("");
-        else
-           mess.setText(Integer.toString(x));
-    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -261,7 +258,22 @@ else
                         }).setNegativeButton("Oui",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                       String mdp= preferences.getString("mdp","DEFAULT");
                         reference.child("isDeleted").setValue("true");
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        AuthCredential credential = EmailAuthProvider
+                                .getCredential(user.getEmail(), mdp);
+
+// Prompt the user to re-provide their sign-in credentials
+                        user.reauthenticate(credential)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        System.out.println("User re-authenticated");
+                                    }
+                                });
+
                        FirebaseAuth.getInstance().getCurrentUser().delete()
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -271,7 +283,7 @@ else
                                             startActivity(intent);
 
                                            finish();
-                                        }
+                                         }
                                         else
                                             Toast.makeText(ProfileActivity.this,"error",Toast.LENGTH_LONG).show();
                                     }
@@ -313,8 +325,8 @@ else
             startActivity(new Intent(ProfileActivity.this,SettingActivity.class));
         }
         else if (id == R.id.nav_notification) {
-            // fragment des requetes
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Fragment_request(),"requfragment").commit();
+            // activite des requetes
+            startActivity(new Intent(ProfileActivity.this,NotifActivity.class));
             toolbar.setTitle(title[3]);
 
         }

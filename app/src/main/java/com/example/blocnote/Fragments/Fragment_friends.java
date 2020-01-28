@@ -102,7 +102,6 @@ SearchView searchView;
                     friend =snapshot.getValue(Friend.class);
                      mFriends.add(friend);
 
-
                 }
 
                 if(mFriends.size()==0)

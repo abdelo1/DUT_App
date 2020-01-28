@@ -5,23 +5,23 @@ public class Chat {
     private String message;
     private String senderid,receiverid;
     private String time;
-    private long timeStamp;
+    private long timestamp;
 public Chat(){}
-    public Chat(String message, String senderid, String receiverid,String time,long timeStamp) {
+    public Chat(String message, String senderid, String receiverid,String time,long timestamp) {
         this.message = message;
         this.senderid = senderid;
         this.receiverid = receiverid;
-        this.timeStamp=timeStamp;
+        this.timestamp=timestamp;
          this.time=time;
 
 
     }
     public long getTimeStamp() {
-        return this.timeStamp;
+        return this.timestamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimeStamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getTime() {

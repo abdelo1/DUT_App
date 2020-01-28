@@ -4,6 +4,15 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+
+import com.bumptech.glide.request.RequestOptions;
+import com.example.blocnote.model.UserClass;
+import com.example.blocnote.notifications.ApiService;
+import com.example.blocnote.notifications.Client;
+import com.example.blocnote.notifications.Data;
+import com.example.blocnote.notifications.Response;
+import com.example.blocnote.notifications.Sender;
+import com.example.blocnote.notifications.Token;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +24,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.blocnote.Adapter.MessageAdapter;
@@ -24,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +42,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class MessageActivity extends AppCompatActivity {
     DatabaseReference reference;
@@ -46,6 +60,8 @@ MessageAdapter adapter;
     String receiverPhoto;
     List<Chat> mchat;
    String user_id;
+   ApiService apiService;
+   boolean notify;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +82,13 @@ MessageAdapter adapter;
         recycler.setLayoutManager(lm);
 
         final Intent intent =getIntent();
-        receiverName=intent.getStringExtra("receiverName");
+
         receiverId=intent.getStringExtra("receiverId");
-        receiverPhoto=intent.getStringExtra("receiverPhoto");
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notify=true;
                 if(inputmMessage.getText().toString().equals(""))
                 {}
                 else{
@@ -95,14 +112,28 @@ MessageAdapter adapter;
            }
        });
 
+        reference=FirebaseDatabase.getInstance().getReference("Users").child(receiverId);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserClass user=dataSnapshot.getValue(UserClass.class);
+                receiverName=user.getNom();
+                receiverPhoto=user.getImageUrl();
+                if (receiverPhoto.equals("default"))
+                    image_profile.setImageResource(R.drawable.user_logo);
+                else
+                    Glide.with(getApplicationContext()).load(receiverPhoto).apply(RequestOptions.fitCenterTransform()).into(image_profile);
+                mreceiverName.setText(receiverName);
+                mreceiverName.setTypeface(null, Typeface.BOLD);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        if (receiverPhoto.equals("default"))
-          image_profile.setImageResource(R.drawable.user_logo);
-          else
-        Glide.with(this).load(receiverPhoto).into(image_profile);
-          mreceiverName.setText(receiverName);
-          mreceiverName.setTypeface(null, Typeface.BOLD);
+            }
+        });
+
+        apiService= Client.getRetrofit("https://fcm.googleapis.com/" ).create(ApiService.class);
 
         this.readMessages(FirebaseAuth.getInstance().getCurrentUser().getUid(),receiverId);
         reference=FirebaseDatabase.getInstance().getReference("Users").child(receiverId);
@@ -235,6 +266,61 @@ MessageAdapter adapter;
         description.put("type","message");
         messref.child(receiverId).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().setValue(description);
 
+        final String message=msg;
+        DatabaseReference db=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserClass user=dataSnapshot.getValue(UserClass.class);
+
+                if(notify)
+                {
+                    sendNotification(receiverId,user.getNom(),message);
+                    notify=false;
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void sendNotification(final String receiverId, final String nom, final String message) {
+       DatabaseReference allTokens=FirebaseDatabase.getInstance().getReference("Tokens");
+       Query query=allTokens.orderByKey().equalTo(receiverId);
+       query.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               for (DataSnapshot ds:dataSnapshot.getChildren())
+               {
+                   Token token=ds.getValue(Token.class);
+                   Data data=new Data(FirebaseAuth.getInstance().getCurrentUser().getUid(),nom+" : "+message,"Nouveau message !",receiverId,R.drawable.ic_notifications_black_24dp);
+                    Sender  sender=new Sender(data,token.getToken()) ;
+                    apiService.sendNotif(sender)
+                            .enqueue(new Callback<Response>() {
+                                @Override
+                                public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                                    Toast.makeText(MessageActivity.this, ""+response.message(), Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onFailure(Call<Response> call, Throwable t) {
+                                    Toast.makeText(MessageActivity.this, "error"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+               }
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
     }
 
     @Override

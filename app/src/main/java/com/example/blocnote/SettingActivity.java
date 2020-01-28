@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
+
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +52,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     AlertDialog dialog;
     FloatingActionButton floatButton;
     Button enreg;
+    ProgressBar pb;
 
     UserClass muser;
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -76,7 +80,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         floatButton=(FloatingActionButton)findViewById(R.id.floatingActionButton);
         enreg=(Button)findViewById(R.id.enregistrer);
         toolbar=findViewById(R.id.toolbar);
-
+        pb=findViewById(R.id.progressBar);
         floatButton.setOnClickListener(this);
         enreg.setOnClickListener(this);
 
@@ -173,8 +177,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         if (requestCode == RC_CHOOSE_PHOTO) {
             if (resultCode == RESULT_OK) { //SUCCESS
                 this.uriImageSelected = data.getData();
+
+                pb.setVisibility(View.VISIBLE);
                 Glide.with(this) //SHOWING PREVIEW OF IMAGE
                         .load(this.uriImageSelected)
+                        .apply(RequestOptions.fitCenterTransform())
                         .into(this.img);
                 uploadPhotoInFirebase();
 
@@ -184,6 +191,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
     private void uploadPhotoInFirebase() {
+
         String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         StorageReference mImageRef = FirebaseStorage.getInstance().getReference("profilePic").child(uuid);
@@ -195,7 +203,12 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                         while (!urlTask.isSuccessful());
                         Uri downloadUrl = urlTask.getResult();
                         final String url=downloadUrl.toString();
-                        reference.child("imageUrl").setValue(url);
+                        reference.child("imageUrl").setValue(url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                pb.setVisibility(View.GONE);
+                            }
+                        });
 
                     }
                 });

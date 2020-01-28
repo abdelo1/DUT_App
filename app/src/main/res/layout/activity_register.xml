@@ -48,7 +48,7 @@
         android:textAllCaps="false"
         android:textColorHint="#000000"
         tools:targetApi="o"
-        android:hint="Filière..."
+        android:hint="Departement.."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
