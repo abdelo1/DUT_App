@@ -59,7 +59,7 @@ public class Fragment_users extends Fragment {
                 List<UserClass> newList=new ArrayList<>();
                 for(UserClass us:mUsers)
                 {
-                    if (us.getNom().toLowerCase().contains(searchWord))
+                    if (us.getNom().toLowerCase().contains(searchWord) || us.getFiliere().toLowerCase().contains(searchWord))
                         newList.add(us);
                 }
                 adapter.updateList(newList);

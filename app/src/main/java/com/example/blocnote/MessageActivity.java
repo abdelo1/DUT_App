@@ -37,49 +37,68 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
 public class MessageActivity extends AppCompatActivity {
     DatabaseReference reference;
-Toolbar toolbar;
-ImageView image_profile;
-TextView mreceiverName,enligne;
-EditText inputmMessage;
-FloatingActionButton send;
-RecyclerView recycler;
-MessageAdapter adapter;
+    Toolbar toolbar;
+    ImageView image_profile;
+    TextView mreceiverName,enligne;
+    EditText inputmMessage;
+    FloatingActionButton send;
+    RecyclerView recycler;
+    MessageAdapter adapter;
     String receiverName;
     String receiverId;
     String receiverPhoto;
     List<Chat> mchat;
    String user_id;
    ApiService apiService;
+   byte encriptionKey[]={9,115,51,86,105,4,-31,-23,-68,88,17,20,3,-105,119,-53};
+   Cipher cipher;
+    static Cipher decipher;
+   static SecretKeySpec secretKeySpec;
+
    boolean notify;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         user_id=FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         image_profile=(ImageView) findViewById(R.id.img);
         mreceiverName=(TextView) findViewById(R.id.text);
         inputmMessage=(EditText) findViewById(R.id.inputMessage);
         send=(FloatingActionButton)findViewById(R.id.btnSend);
         enligne=(TextView) findViewById(R.id.isonline);
-
-
-
         recycler=(RecyclerView) findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
         LinearLayoutManager lm =new LinearLayoutManager(getApplicationContext());
         recycler.setLayoutManager(lm);
+        try {
+            cipher = Cipher.getInstance("AES");
+            decipher= Cipher.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+        secretKeySpec=new SecretKeySpec(encriptionKey,"AES");
 
         final Intent intent =getIntent();
 
@@ -203,7 +222,53 @@ MessageAdapter adapter;
             }
         });
     }
+    private String chiffreMessage(String message){
+        byte[] stringByte=message.getBytes();
+        byte[] encryptedByte=new byte [stringByte.length];
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE,secretKeySpec);
+            encryptedByte = cipher.doFinal(stringByte);
 
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        String str= null;
+        try {
+            str = new String(encryptedByte,"ISO-8859-1");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+    public static String dechiffreMessage(String message) throws UnsupportedEncodingException {
+        byte[] encryptedByte=message.getBytes("ISO-8859-1");
+        String decryptedString =message ;
+
+        byte [] decryption;
+        if(decipher!=null) {
+            try {
+
+                decipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+
+
+                decryption = decipher.doFinal(encryptedByte);
+                decryptedString = new String(decryption);
+            } catch (InvalidKeyException e) {
+                e.printStackTrace();
+            } catch (BadPaddingException e) {
+                e.printStackTrace();
+            } catch (IllegalBlockSizeException e) {
+                e.printStackTrace();
+            }
+        }
+        return decryptedString;
+
+
+    }
     private void readMessages(final String myId, final String userId) {
         mchat=new ArrayList<>();
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("Chats");
@@ -257,7 +322,7 @@ MessageAdapter adapter;
         HashMap<String,Object> hashmap=new HashMap<>();
         hashmap.put("senderid",FirebaseAuth.getInstance().getCurrentUser().getUid());
         hashmap.put("receiverid",receiverId);
-        hashmap.put("message",msg);
+        hashmap.put("message",chiffreMessage(msg));
         hashmap.put("time",time);
         hashmap.put("timestamp",timeStamp);
         ref.push().setValue(hashmap);

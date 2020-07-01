@@ -12,6 +12,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -93,7 +96,56 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
             }
         });
+        inputName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!muser.getNom().equals(inputName.getText().toString()))
+                {
+                    enreg.setBackgroundColor(R.color.colorPrimary);
+                }
+                else
+
+                {
+                    enreg.setBackgroundColor(R.color.colorGrey);
+                }
+
+            }
+        });
+        inputEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!fuser.getEmail().equals(inputEmail.getText().toString()))
+                {
+                    enreg.setBackgroundColor(R.color.colorPrimary);
+                }
+                else
+
+                {
+                    enreg.setBackgroundColor(R.color.colorGrey);
+                }
+            }
+        });
 
     }
 
@@ -105,7 +157,14 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.enregistrer:
                 if (!muser.getNom().equals(inputName.getText().toString()))
                 {
-                    reference.child("nom").setValue(inputName.getText().toString());
+                    reference.child("nom").setValue(inputName.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SettingActivity.this,"Nom changé avec succès",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                 }
                 if (!fuser.getEmail().equals(inputEmail.getText().toString()))
                 {
@@ -178,7 +237,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             if (resultCode == RESULT_OK) { //SUCCESS
                 this.uriImageSelected = data.getData();
 
-                pb.setVisibility(View.VISIBLE);
                 Glide.with(this) //SHOWING PREVIEW OF IMAGE
                         .load(this.uriImageSelected)
                         .apply(RequestOptions.fitCenterTransform())
@@ -191,7 +249,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
     private void uploadPhotoInFirebase() {
-
+          pb.setVisibility(View.VISIBLE);
         String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         StorageReference mImageRef = FirebaseStorage.getInstance().getReference("profilePic").child(uuid);

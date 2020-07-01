@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.example.blocnote.MessageActivity;
 import com.example.blocnote.R;
 import com.example.blocnote.model.Chat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 
@@ -51,7 +53,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.SentMess
     @Override
     public void onBindViewHolder(@NonNull SentMessageHolder sentMessageHolder, int i) {
         Chat chat =listChat.get(i);
-        sentMessageHolder.messageText.setText(chat.getMessage());
+        String msg=chat.getMessage();
+
+        try {
+            sentMessageHolder.messageText.setText(MessageActivity.dechiffreMessage(msg) );
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         sentMessageHolder.timeText.setText(chat.getTime());
     }
 

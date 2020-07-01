@@ -46,6 +46,13 @@ public class UserClass {
         this.isDeleted=Deleted;
         this.isonline=isonline;
     }
+    public UserClass(String nom, String imageProfile, String id,String filiere)
+    {
+        this.nom=nom;
+        this.imageUrl=imageProfile;
+        this.id=id;
+        this.filiere=filiere;
+    }
 public UserClass(){}
     public String getId() {
         return this.id;

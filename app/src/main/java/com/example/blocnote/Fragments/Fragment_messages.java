@@ -67,7 +67,7 @@ public class Fragment_messages extends Fragment {
 
 
                 }
-                System.out.println("size   "+userListId.size());
+
                 readChat();
             }
 

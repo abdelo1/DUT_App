@@ -29,7 +29,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
          inscription=(Button)findViewById(R.id.btn_inscription);
          connexion = (Button)findViewById(R.id.btn_connexion);
-        // App.init();
+        App app=new App();
+        try{
+            app.init();
+        }
+        catch(Exception e)
+        {
+
+        }
+
         FirebaseApp.initializeApp(this);
         inscription.setOnClickListener(register);
         connexion.setOnClickListener(connect);

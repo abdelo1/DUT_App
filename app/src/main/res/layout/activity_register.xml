@@ -5,7 +5,7 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/background1"
     android:orientation="vertical"
     tools:context=".RegisterActivity">
 
@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.818" />
 
     <EditText
-        android:id="@+id/filiere"
+        android:id="@+id/filieretext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_image"
@@ -47,15 +47,37 @@
         android:padding="15dp"
         android:textAllCaps="false"
         android:textColorHint="#000000"
-        tools:targetApi="o"
-        android:hint="Departement.."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.46" />
+        app:layout_constraintVertical_bias="0.46"
+        tools:targetApi="o" />
 
+
+    <Spinner
+        android:id="@+id/filiere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/filieretext"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="324dp"
+        android:layout_marginBottom="364dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTintMode="screen"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:padding="15dp"
+        android:textAllCaps="false"
+        android:textColorHint="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/user_email"
@@ -77,12 +99,12 @@
         android:padding="15dp"
         android:textAllCaps="false"
         android:textColorHint="#000000"
-        tools:targetApi="o"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.559" />
+        app:layout_constraintVertical_bias="0.559"
+        tools:targetApi="o" />
 
     <ImageView
         android:id="@+id/email_image"
@@ -119,12 +141,12 @@
 
         android:textAllCaps="false"
         android:textColorHint="#000000"
-        tools:targetApi="o"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.686" />
+        app:layout_constraintVertical_bias="0.686"
+        tools:targetApi="o" />
 
 
     <ImageView
@@ -154,20 +176,20 @@
         android:backgroundTint="@color/colorPrimary"
         android:backgroundTintMode="screen"
         android:cursorVisible="true"
+        android:hint="Nom et Prénom..."
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
-        android:padding="15dp"
 
+        android:padding="15dp"
         android:textAllCaps="false"
         android:textColorHint="#000000"
-        tools:targetApi="o"
-        android:hint="Nom et Prénom..."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.465"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.359" />
+        app:layout_constraintVertical_bias="0.359"
+        tools:targetApi="o" />
 
 
     <ProgressBar

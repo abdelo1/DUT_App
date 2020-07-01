@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.blocnote.Adapter.RequestViewAdapter;
 import com.example.blocnote.model.Request;
@@ -18,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,20 +28,40 @@ public class NotifActivity extends AppCompatActivity {
     private TextView noNotif;
     private RequestViewAdapter adapter;
     private Toolbar toolbar;
+    private Intent intent;
+    private String title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notif);
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Notifications");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mlist=new ArrayList<>();
-        recycler=findViewById(R.id.recyclerRequest);
-        recycler.setHasFixedSize(true);
-        recycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        noNotif=findViewById(R.id.notifText);
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_notif);
+    toolbar = findViewById(R.id.toolbar);
+    toolbar.setTitle("Notifications");
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    mlist=new ArrayList<>();
+    recycler=findViewById(R.id.recyclerRequest);
+    recycler.setHasFixedSize(true);
+    recycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    noNotif=findViewById(R.id.notifText);
+    intent =getIntent();
+    try {
+        title=intent.getStringExtra("title");
+        if(title!=null && !title.isEmpty())
+        {
+            System.out.println("t");
+            Toast.makeText(this,""+title,Toast.LENGTH_LONG);
+        }
+
+        else
+
+        System.out.println("title===> "+title);
+
+    }
+    catch (NullPointerException e)
+    {
+        System.out.println(e.getMessage());
+    }
         readRequest();
 
     }

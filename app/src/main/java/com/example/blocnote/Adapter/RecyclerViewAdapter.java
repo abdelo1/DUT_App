@@ -113,6 +113,7 @@ if(mReference!=null)
                         // si oui on remplace le texte par ami
                         viewHolder.text_requ.setText("Ami");
                         viewHolder.text_requ.setEnabled(false);
+                        viewHolder.text_requ.setBackgroundColor(R.color.colorGrey);
 
                     }
                 }
@@ -131,6 +132,7 @@ if(mReference!=null)
                         //remplacer le texte par ami
                         viewHolder.text_requ.setText("Ami");
                         viewHolder.text_requ.setEnabled(false);
+                        viewHolder.text_requ.setBackgroundColor(R.color.colorGrey);
 
                     }
                     if (dataSnapshot.getValue() != null && dataSnapshot.getValue().equals("no")) {

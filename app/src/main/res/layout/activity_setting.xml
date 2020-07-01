@@ -9,83 +9,75 @@
 
     <EditText
         android:id="@+id/inputName"
-        android:layout_width="224dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="56dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/barrier2"
-        app:layout_constraintTop_toBottomOf="@+id/nom"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintBottom_toTopOf="@+id/filiere"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintStart_toEndOf="@id/barrier2" />
 
     <TextView
         android:id="@+id/nom"
-        android:layout_width="70dp"
-        android:layout_height="16dp"
-        android:layout_marginEnd="244dp"
+        android:layout_width="87dp"
+        android:layout_height="27dp"
         android:text="Nom"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/inputName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.56"
-        app:layout_constraintStart_toEndOf="@+id/barrier2"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintStart_toEndOf="@id/barrier2" />
 
     <TextView
         android:id="@+id/email"
         android:layout_width="59dp"
         android:layout_height="20dp"
-        android:layout_marginBottom="196dp"
         android:text="Email"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/inputEmail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.032"
-        app:layout_constraintStart_toEndOf="@+id/barrier2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toEndOf="@id/barrier2" />
 
     <TextView
         android:id="@+id/filiere"
-        android:layout_width="72dp"
-        android:layout_height="33dp"
+        android:layout_width="159dp"
+        android:layout_height="31dp"
 
-        android:layout_marginStart="72dp"
-        android:layout_marginBottom="152dp"
-        android:text="Filière :"
+        android:layout_marginBottom="48dp"
+        android:text="Departement :"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputName"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toTopOf="@+id/enregistrer"
+        app:layout_constraintEnd_toStartOf="@+id/classe"
+        app:layout_constraintHorizontal_bias="0.327"
+        app:layout_constraintStart_toEndOf="@id/barrier2" />
 
     <TextView
         android:id="@+id/classe"
-        android:layout_width="67dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="172dp"
-        android:layout_marginBottom="152dp"
+        android:layout_width="97dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="36dp"
         android:text="INFO 2"
         android:textAllCaps="true"
         android:textColor="#000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/enregistrer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/barrier2"
         app:layout_constraintTop_toBottomOf="@+id/inputName"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.472" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginBottom="664dp"
         android:background="@color/colorPrimary"
-        android:theme="@style/ToolbarStyle"
 
+        android:theme="@style/ToolbarStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -98,22 +90,20 @@
         android:id="@+id/imageView6"
         android:layout_width="52dp"
         android:layout_height="33dp"
-        android:layout_marginBottom="304dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintEnd_toStartOf="@id/barrier2"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/email"
         app:srcCompat="@drawable/ic_mail_black_24dp" />
 
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="66dp"
         android:layout_height="43dp"
-        android:layout_marginBottom="224dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.017"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toStartOf="@id/barrier2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6"
         app:srcCompat="@drawable/ic_person_violet_24dp" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -122,21 +112,16 @@
         android:layout_height="wrap_content"
         app:barrierDirection="end"
         app:constraint_referenced_ids="imageView6,imageView7"
-        tools:layout_editor_absoluteX="411dp" />
+        tools:layout_editor_absoluteX="72dp" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintHorizontal_bias="0.812"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.151"
         app:srcCompat="@drawable/ic_photo_camera_black_24dp" />
-
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView3"
@@ -146,47 +131,44 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.164" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.067" />
 
     <EditText
         android:id="@+id/inputEmail"
-        android:layout_width="224dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Email"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/barrier2"
-        app:layout_constraintTop_toBottomOf="@+id/email"
-        app:layout_constraintVertical_bias="0.045" />
+        app:layout_constraintBottom_toTopOf="@+id/nom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@id/barrier2" />
 
     <Button
         android:id="@+id/enregistrer"
-        android:layout_width="285dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="590dp"
-        android:background="@drawable/btn_custom"
-        android:text="Enregistrer modifications"
+        android:layout_width="181dp"
+        android:layout_height="58dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorGrey"
+        android:text="Enregistrer"
         android:textAppearance="@style/TextTheme"
         android:textColor="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
-        app:layout_constraintStart_toEndOf="@+id/barrier2"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.468" />
+        app:layout_constraintHorizontal_bias="0.982"
+        app:layout_constraintStart_toEndOf="@id/barrier2" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="206dp"
+        tools:layout_editor_absoluteY="187dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

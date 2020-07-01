@@ -1,10 +1,9 @@
 package com.example.blocnote;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,8 +13,6 @@ import androidx.core.view.MenuItemCompat;
 import androidx.appcompat.app.AlertDialog;
 
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -27,16 +24,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.widget.ImageView;
-import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.blocnote.Adapter.RecyclerViewAdapterFriends;
-import com.example.blocnote.Fragments.Fragment_events;
 import com.example.blocnote.Fragments.Fragment_friends;
 import com.example.blocnote.Fragments.Fragment_messages;
 import com.example.blocnote.Fragments.Fragment_request;
@@ -55,15 +52,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.List;
+
 public class  ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Fragment_messages.OnItemSelectedListener {
-    Fragment_events eventF;
+
     Fragment_messages messF;
     Fragment_users userF;
     Fragment_request  requF;
     Fragment_friends friF;
+    Context context;
     public static NavigationView navigationView;
-
+   private List<UserClass> listUsers;
+   private UserClass  muser;
     RecyclerViewAdapterFriends adapter;
  FirebaseAuth mAuth;
     FirebaseUser fuser;
@@ -73,15 +74,15 @@ public class  ProfileActivity extends AppCompatActivity
     private TextView user_txt;
     private static TextView notif;
     private static TextView mess;
+    private  RecyclerView recyclerView;
+
     String user_id;
-    private String title[]={"Trouver des amis","Messages","Evenements","Notifications"};
+    private String title[]={"Trouver des amis","Messages","Evenements","Notifications","Groupes"};
     Toolbar toolbar;
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        if (eventF!=null&&eventF.isVisible())
-            outState.putString("LastVisible","eventF");
-        else if (userF!=null&&userF.isVisible())
+       if (userF!=null&&userF.isVisible())
             outState.putString("LastVisible","userF");
         else if (requF!=null&&requF.isVisible())
             outState.putString("LastVisible","requF");
@@ -96,11 +97,6 @@ public class  ProfileActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        Fragment_events eventF= (Fragment_events) getSupportFragmentManager().findFragmentByTag("eventfragment");
-        Fragment_messages messF= (Fragment_messages) getSupportFragmentManager().findFragmentByTag("messfragment");
-        Fragment_users userF= (Fragment_users) getSupportFragmentManager().findFragmentByTag("userfragment");
-        Fragment_request  requF= (Fragment_request) getSupportFragmentManager().findFragmentByTag("requfragment");
-        Fragment_friends  friF= (Fragment_friends) getSupportFragmentManager().findFragmentByTag("friendsfragment");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
@@ -125,8 +121,6 @@ public class  ProfileActivity extends AppCompatActivity
 
   if (savedInstanceState==null)
       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Fragment_messages()).commit();
-  else if (savedInstanceState.getString("LastVisible").equals("eventF"))
-      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Fragment_events()).commit();
 
 else if (savedInstanceState.getString("LastVisible").equals("messF"))
       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Fragment_messages()).commit();
@@ -156,7 +150,7 @@ else
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               UserClass muser= dataSnapshot.getValue(UserClass.class);
+               muser= dataSnapshot.getValue(UserClass.class);
                 user_name.setText(muser.getNom());
                 user_txt.setText(muser.getFiliere());
 
@@ -303,6 +297,8 @@ else
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -330,6 +326,7 @@ else
             toolbar.setTitle(title[3]);
 
         }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -337,8 +334,9 @@ else
 
     @Override
     public void onRssItemSelected() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Fragment_friends(),"friendsfragment").addToBackStack(null).commit();
-        toolbar.setTitle("Amis");
+ getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Fragment_friends(),"friendsfragment").addToBackStack(null).commit();
+            toolbar.setTitle("Amis");
 
-}
+        }
+
 }

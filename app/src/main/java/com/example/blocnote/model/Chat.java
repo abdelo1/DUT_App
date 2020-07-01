@@ -16,6 +16,13 @@ public Chat(){}
 
 
     }
+    public Chat(String message,String time,long timestamp) {
+        this.message = message;
+        this.timestamp=timestamp;
+        this.time=time;
+
+
+    }
     public long getTimeStamp() {
         return this.timestamp;
     }

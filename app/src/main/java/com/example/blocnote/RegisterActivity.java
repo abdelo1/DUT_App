@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -32,15 +35,14 @@ import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private ProgressBar progressBar;
     private Button btn_inscription;
-   private EditText  user_id,user_email,user_password,user_filiere;
+   private EditText  user_id,user_email,user_password,filiereText;
+  private Spinner user_filiere;
    private FirebaseAuth mAuth;
-    private String email;
-   private String password;
-   private String nom;
-   private String filiere;
+    private String email, password,nom,filiere;
+   private String filieres[]={"GEA","INFO","TC","LPE","GRH","GLT"};
 
 private  String token;
     DatabaseReference reference ;
@@ -54,10 +56,15 @@ private  String token;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         user_id=(EditText) findViewById(R.id.user_id);
-
+        filiereText=(EditText) findViewById(R.id.filieretext);
         user_email=(EditText)findViewById(R.id.user_email);
         user_password=(EditText)findViewById(R.id.user_mdp);
-        user_filiere=(EditText)findViewById(R.id.filiere);
+        user_filiere=(Spinner)findViewById(R.id.filiere);
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, filieres);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        user_filiere.setAdapter(adapter);
+        user_filiere.setOnItemSelectedListener(this);
+
         btn_inscription=(Button) findViewById(R.id.btn_inscription);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( RegisterActivity.this,  new OnSuccessListener<InstanceIdResult>() {
             @Override
@@ -167,13 +174,11 @@ private  String token;
             user_email.setError(null);
         }
 
-        filiere =user_filiere.getText().toString();
         if (TextUtils.isEmpty(filiere)) {
-            user_filiere.setError("Required.");
+            Toast.makeText(this, "Veuillez choisir votre departement", Toast.LENGTH_SHORT).show();
             valid = false;
-        } else {
-            user_filiere.setError(null);
         }
+
 
         nom=user_id.getText().toString();
         if (TextUtils.isEmpty(nom)) {
@@ -200,4 +205,14 @@ private  String token;
         return valid;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        filiere=adapterView.getItemAtPosition(i).toString();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

@@ -61,7 +61,7 @@ SearchView searchView;
                  List<Friend> newList=new ArrayList<>();
                  for(Friend friend :mFriends)
                  {
-                     if (friend.getNom().toLowerCase().contains(searchWord))
+                     if (friend.getNom().toLowerCase().contains(searchWord) || friend.getFiliere().toLowerCase().contains(searchWord))
                          newList.add(friend);
                  }
                  adapter.updateList(newList);

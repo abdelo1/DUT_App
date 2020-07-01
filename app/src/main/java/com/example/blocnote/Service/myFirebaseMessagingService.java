@@ -27,6 +27,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class myFirebaseMessagingService extends FirebaseMessagingService {
     private static final String IST_CANAL = "IST_CANAL";
 
@@ -49,10 +52,10 @@ public class myFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         int notificationId = 887;
         if (remoteMessage.getNotification()!=null) {
-
-                Intent intent = new Intent(this, NotifActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               Intent intent = new Intent(this, NotifActivity.class);
+               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
 
                 Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, IST_CANAL)
@@ -62,6 +65,7 @@ public class myFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)  //dismisses the notification on click
                         .setSound(defaultSoundUri);
+
 
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -83,6 +87,7 @@ public class myFirebaseMessagingService extends FirebaseMessagingService {
         }
         else
         {
+
             String sent=remoteMessage.getData().get("sent");
             String user =remoteMessage.getData().get("user");
             FirebaseUser fuser=FirebaseAuth.getInstance().getCurrentUser();
